@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>AI Research Assistant</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true"></div>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero__copy">
+          <p class="eyebrow">AI Research Assistant</p>
+          <h1>Turn a single PDF into a focused research briefing room.</h1>
+          <p class="lede">
+            Upload a paper, ask precise follow-up questions, and keep a clean
+            running thread instead of juggling notes in multiple tabs.
+          </p>
+          <div class="hero__actions">
+            <button class="button button--ghost" id="jump-to-workbench" type="button">
+              Open workbench
+            </button>
+            <div class="status-pill status-pill--checking" id="api-status">
+              Checking API
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero__panel">
+          <div class="metric-card">
+            <span class="metric-card__label">Flow</span>
+            <strong>Upload once</strong>
+            <p>Index one paper and reuse it across multiple questions.</p>
+          </div>
+          <div class="metric-card">
+            <span class="metric-card__label">Focus</span>
+            <strong>Ask naturally</strong>
+            <p>Use direct questions instead of hunting through the PDF manually.</p>
+          </div>
+          <div class="metric-card">
+            <span class="metric-card__label">Session</span>
+            <strong>Keep the thread</strong>
+            <p>Your recent prompts and answers stay visible in one place.</p>
+          </div>
+        </aside>
+      </header>
+
+      <main class="workspace" id="workbench">
+        <section class="panel panel--upload">
+          <div class="panel__header">
+            <div>
+              <p class="panel__eyebrow">Paper Intake</p>
+              <h2>Load the source document</h2>
+            </div>
+            <p class="panel__copy">
+              Start with a readable PDF. The backend extracts text, builds a
+              local search index, and prepares the paper for Q&amp;A.
+            </p>
+          </div>
+
+          <form id="upload-form" class="upload-form">
+            <label class="dropzone" for="pdf-file">
+              <input id="pdf-file" name="file" type="file" accept="application/pdf" />
+              <span class="dropzone__eyebrow">PDF only</span>
+              <strong id="selected-file-name">Choose a paper or drag one here</strong>
+              <span class="dropzone__hint">
+                The current backend indexes one paper at a time.
+              </span>
+            </label>
+            <button class="button" id="upload-button" type="submit">
+              Process paper
+            </button>
+          </form>
+
+          <div class="meta-grid">
+            <article class="meta-card">
+              <span class="meta-card__label">Current paper</span>
+              <strong id="paper-name">No paper loaded</strong>
+            </article>
+            <article class="meta-card">
+              <span class="meta-card__label">Index status</span>
+              <strong id="paper-status">Waiting for upload</strong>
+            </article>
+          </div>
+
+          <section class="prompt-bank">
+            <div class="prompt-bank__header">
+              <p class="panel__eyebrow">Prompt Starters</p>
+              <h3>Useful first questions</h3>
+            </div>
+            <div class="prompt-bank__list">
+              <button class="prompt-chip" type="button" data-prompt="Give me the core argument of this paper in plain language.">
+                Core argument
+              </button>
+              <button class="prompt-chip" type="button" data-prompt="List the main findings and explain why they matter.">
+                Main findings
+              </button>
+              <button class="prompt-chip" type="button" data-prompt="What methodology does this paper use, and what are its limitations?">
+                Methodology
+              </button>
+              <button class="prompt-chip" type="button" data-prompt="Summarize this paper as if I need to present it in class.">
+                Presentation summary
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel panel--chat">
+          <div class="panel__header panel__header--chat">
+            <div>
+              <p class="panel__eyebrow">Research Thread</p>
+              <h2>Ask the indexed paper</h2>
+            </div>
+            <p class="panel__copy" id="thread-caption">
+              Upload a paper to unlock the question composer.
+            </p>
+          </div>
+
+          <div class="conversation" id="conversation" aria-live="polite"></div>
+
+          <form id="question-form" class="composer">
+            <label class="sr-only" for="question-input">Question</label>
+            <textarea
+              id="question-input"
+              rows="4"
+              placeholder="Ask for a summary, findings, methodology, limitations, or a presentation-ready explanation."
+            ></textarea>
+            <div class="composer__footer">
+              <p id="composer-hint">Upload a PDF before sending a question.</p>
+              <button class="button" id="ask-button" type="submit">
+                Ask paper
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
